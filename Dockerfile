@@ -10,8 +10,10 @@ COPY . .
 
 # Try multiple possible main files
 RUN if [ -f "source/data_structures/functionalities/test_complete_system.cpp" ]; then \
+        echo "Compiling test_complete_system.cpp..."; \
         g++ -o server source/data_structures/functionalities/test_complete_system.cpp -std=c++11 -pthread -I.; \
     elif [ -f "server.cpp" ]; then \
+        echo "Compiling server.cpp..."; \
         g++ -o server server.cpp -std=c++11 -pthread; \
     else \
         MAIN_FILE=$(find . -name "*.cpp" -type f | head -1); \
