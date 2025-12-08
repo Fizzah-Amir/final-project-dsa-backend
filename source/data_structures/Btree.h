@@ -57,7 +57,9 @@ private:
     Node* load_node(int block_index);
     void save_node(Node* node, bool async = true);
     void worker_function();
-     int get_flight_count() const;
+    public:
+      int get_flight_count() const;
+      private:
     // B-tree operations
     void split_child(Node* parent, int index, Node* child);
     void insert_non_full(Node* node, int key, const string& value);
