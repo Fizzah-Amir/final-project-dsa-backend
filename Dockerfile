@@ -23,4 +23,3 @@ RUN if [ -f server ]; then \
 
 EXPOSE 8080
 CMD ./server ${PORT:-8080}
-

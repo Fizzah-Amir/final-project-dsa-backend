@@ -1,0 +1,84 @@
+ #include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <chrono>
+#include <thread>
+#include <cstdlib>
+#include "flight.h"
+#include "gate.h"
+#include "passenger.h"
+#include "graph.h"
+
+using namespace std;
+
+// Global data structures
+map<string, Flight> flightMap; // Hash table for O(1) lookup
+BTree flightTree;              // B-Tree for range queries
+vector<Gate> gateList;
+vector<Passenger> passengerList;
+Graph routeGraph;
+
+// API Response helper
+string jsonResponse(bool success, const string& message, const string& data = "{}") {
+    return "HTTP/1.1 " + (success ? "200 OK" : "400 Bad Request") + "\r\n"
+           "Content-Type: application/json\r\n"
+           "Access-Control-Allow-Origin: *\r\n"
+           "\r\n"
+           "{\"success\":" + (success ? "true" : "false") + 
+           ",\"message\":\"" + message + "\"" +
+           (data != "{}" ? ",\"data\":" + data : "") + "}";
+}
+
+// Parse HTTP request
+void handleRequest(const string& request) {
+    string method, path;
+    stringstream ss(request);
+    ss >> method >> path;
+    
+    cout << "Request: " << method << " " << path << endl;
+    
+    // API Routes
+    if (path == "/api/flights" && method == "GET") {
+        // Return all flights
+        string flightsJson = "[";
+        // ... implementation to get flights from B-Tree
+        flightsJson += "]";
+        cout << jsonResponse(true, "Flights retrieved", flightsJson) << endl;
+    }
+    else if (path.find("/api/flights/") == 0 && method == "GET") {
+        // Get specific flight
+        string flightNumber = path.substr(13);
+        // ... implementation
+    }
+    else if (path == "/api/flights" && method == "POST") {
+        // Create new flight
+        // ... implementation
+    }
+    // ... other routes
+}
+
+// Simple HTTP server
+void runServer() {
+    cout << "Starting Airport Management Server on port 3000..." << endl;
+    cout << "Press Ctrl+C to stop the server" << endl;
+    
+    // For Windows (using netcat alternative)
+    #ifdef _WIN32
+    system("echo Starting server...");
+    system("python -m http.server 3000 &"); // Temporary for frontend
+    #else
+    system("echo 'HTTP/1.1 200 OK\\nContent-Type: application/json\\n\\n{\"status\":\"running\"}' | nc -l 3000 -q 1");
+    #endif
+}
+
+int main() {
+    // Initialize with sample data
+    initializeSampleData();
+    
+    // Start server
+    runServer();
+    
+    return 0;
+}
